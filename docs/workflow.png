@@ -1,0 +1,16 @@
+Image Dataset
+      ↓
+Image Preprocessing
+(Resize → RGB → Flatten)
+      ↓
+Label Encoding
+      ↓
+Train-Test Split
+      ↓
+Random Forest Training
+      ↓
+Hyperparameter Tuning
+      ↓
+Model Evaluation
+      ↓
+Prediction
