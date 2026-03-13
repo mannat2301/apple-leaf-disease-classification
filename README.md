@@ -82,20 +82,27 @@ K-Means Clustering Accuracy:            24.17%
 ```
 apple-leaf-disease-classification/
 │
-├── 📓 Project_Random_Forest.ipynb     # Supervised approach — Random Forest
-├── 📓 Project_K_Means.ipynb           # Unsupervised approach — K-Means + PCA
+├── docs/                         # Documentation and workflow diagrams
+│   ├── RESULTS.docx
+│   ├── apple_disease_ml_workflow.svg
+│   └── dataset.md
 │
-├── data/
-│   └── dataset_split/
-│       ├── train/
-│       │   ├── Apple Apple scab/
-│       │   ├── Apple Black rot/
-│       │   ├── Apple Cedar apple rust/
-│       │   └── Apple healthy/
-│       └── test/
+├── notebooks/                    # Experimentation and model training notebooks
+│   ├── Project.ipynb
+│   └── Project_K_Means_Final.ipynb
 │
-├── Apple_Disease_Report.pdf           # Full comparative research report
-└── README.md
+├── reports/                      # Final reports and research results
+│   └── Apple_Disease_Final_Report.docx
+│
+├── src/                          # Source code for ML pipeline
+│   ├── preprocess.py             # Data preprocessing
+│   ├── train_model.py            # Model training
+│   ├── evaluate_model.py         # Model evaluation
+│   └── predict.py                # Prediction script
+│
+├── requirements.txt              # Python dependencies
+├── .gitignore                    # Git ignored files
+└── README.md                     # Project documentation
 ```
 
 ---
