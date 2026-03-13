@@ -1,0 +1,173 @@
+<svg width="100%" viewBox="0 0 680 1020">
+<defs>
+  <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+</defs>
+
+<!-- TITLE -->
+<text class="th" x="340" y="30" text-anchor="middle" font-size="16">Apple leaf disease classification — ML workflow</text>
+
+<!-- ── SHARED PREPROCESSING ── -->
+<text class="ts" x="340" y="62" text-anchor="middle">Shared preprocessing</text>
+<line x1="120" y1="67" x2="260" y2="67" stroke="var(--color-border-secondary)" stroke-width="0.5"/>
+<line x1="420" y1="67" x2="560" y2="67" stroke="var(--color-border-secondary)" stroke-width="0.5"/>
+
+<g class="node c-teal">
+  <rect x="240" y="76" width="200" height="52" rx="8" stroke-width="0.5"/>
+  <text class="th" x="340" y="97" text-anchor="middle" dominant-baseline="central">PlantVillage dataset</text>
+  <text class="ts" x="340" y="115" text-anchor="middle" dominant-baseline="central">7,539 apple leaf images · 4 classes</text>
+</g>
+<line x1="340" y1="128" x2="340" y2="155" class="arr" marker-end="url(#arrow)"/>
+
+<g class="node c-teal">
+  <rect x="240" y="156" width="200" height="52" rx="8" stroke-width="0.5"/>
+  <text class="th" x="340" y="177" text-anchor="middle" dominant-baseline="central">Resize + BGR→RGB</text>
+  <text class="ts" x="340" y="195" text-anchor="middle" dominant-baseline="central">64×64 (RF) · 32×32 (KM)</text>
+</g>
+<line x1="340" y1="208" x2="340" y2="235" class="arr" marker-end="url(#arrow)"/>
+
+<g class="node c-teal">
+  <rect x="240" y="236" width="200" height="52" rx="8" stroke-width="0.5"/>
+  <text class="th" x="340" y="257" text-anchor="middle" dominant-baseline="central">Flatten to 1D vector</text>
+  <text class="ts" x="340" y="275" text-anchor="middle" dominant-baseline="central">12,288D (RF) · 3,072D (KM)</text>
+</g>
+<line x1="340" y1="288" x2="340" y2="315" class="arr" marker-end="url(#arrow)"/>
+
+<g class="node c-teal">
+  <rect x="240" y="316" width="200" height="44" rx="8" stroke-width="0.5"/>
+  <text class="th" x="340" y="338" text-anchor="middle" dominant-baseline="central">Label encode classes (0–3)</text>
+</g>
+
+<!-- SPLIT -->
+<line x1="240" y1="360" x2="156" y2="395" class="arr" marker-end="url(#arrow)" stroke="var(--color-border-primary)"/>
+<line x1="440" y1="360" x2="524" y2="395" class="arr" marker-end="url(#arrow)" stroke="var(--color-border-primary)"/>
+<text class="ts" x="340" y="382" text-anchor="middle">Split into two approaches</text>
+
+<!-- ══════════════════════════════════ -->
+<!-- LEFT — Random Forest              -->
+<!-- ══════════════════════════════════ -->
+<g class="c-purple">
+  <rect x="20" y="395" width="260" height="28" rx="6" stroke-width="0.5"/>
+  <text class="th" x="150" y="409" text-anchor="middle" dominant-baseline="central">Random Forest (supervised)</text>
+</g>
+
+<g class="node c-purple">
+  <rect x="20" y="438" width="260" height="52" rx="8" stroke-width="0.5"/>
+  <text class="th" x="150" y="459" text-anchor="middle" dominant-baseline="central">Train / test split</text>
+  <text class="ts" x="150" y="477" text-anchor="middle" dominant-baseline="central">80% train · 20% test · stratified</text>
+</g>
+<line x1="150" y1="490" x2="150" y2="517" class="arr" marker-end="url(#arrow)"/>
+
+<g class="node c-purple">
+  <rect x="20" y="518" width="260" height="52" rx="8" stroke-width="0.5"/>
+  <text class="th" x="150" y="539" text-anchor="middle" dominant-baseline="central">GridSearchCV (5-fold CV)</text>
+  <text class="ts" x="150" y="557" text-anchor="middle" dominant-baseline="central">n_estimators {50,100} · max_depth {None,10}</text>
+</g>
+<line x1="150" y1="570" x2="150" y2="597" class="arr" marker-end="url(#arrow)"/>
+
+<g class="node c-purple">
+  <rect x="20" y="598" width="260" height="52" rx="8" stroke-width="0.5"/>
+  <text class="th" x="150" y="619" text-anchor="middle" dominant-baseline="central">Random Forest classifier</text>
+  <text class="ts" x="150" y="637" text-anchor="middle" dominant-baseline="central">100 trees · max_depth=10</text>
+</g>
+<line x1="150" y1="650" x2="150" y2="677" class="arr" marker-end="url(#arrow)"/>
+
+<g class="node c-purple">
+  <rect x="20" y="678" width="260" height="44" rx="8" stroke-width="0.5"/>
+  <text class="th" x="150" y="700" text-anchor="middle" dominant-baseline="central">Predict on test set</text>
+</g>
+<line x1="150" y1="722" x2="150" y2="749" class="arr" marker-end="url(#arrow)"/>
+
+<g class="node c-green">
+  <rect x="20" y="750" width="260" height="64" rx="8" stroke-width="0.5"/>
+  <text class="th" x="150" y="771" text-anchor="middle" dominant-baseline="central">Results: 75.00% accuracy</text>
+  <text class="ts" x="150" y="789" text-anchor="middle" dominant-baseline="central">Precision · Recall · F1 · Confusion matrix</text>
+  <text class="ts" x="150" y="805" text-anchor="middle" dominant-baseline="central">Best class: Cedar Rust F1=0.78</text>
+</g>
+
+<!-- ══════════════════════════════════ -->
+<!-- RIGHT — K-Means                   -->
+<!-- ══════════════════════════════════ -->
+<g class="c-coral">
+  <rect x="400" y="395" width="260" height="28" rx="6" stroke-width="0.5"/>
+  <text class="th" x="530" y="409" text-anchor="middle" dominant-baseline="central">K-Means + PCA (unsupervised)</text>
+</g>
+
+<g class="node c-coral">
+  <rect x="400" y="438" width="260" height="52" rx="8" stroke-width="0.5"/>
+  <text class="th" x="530" y="459" text-anchor="middle" dominant-baseline="central">Stratified sampling</text>
+  <text class="ts" x="530" y="477" text-anchor="middle" dominant-baseline="central">200 images per class · 800 total</text>
+</g>
+<line x1="530" y1="490" x2="530" y2="517" class="arr" marker-end="url(#arrow)"/>
+
+<g class="node c-coral">
+  <rect x="400" y="518" width="260" height="52" rx="8" stroke-width="0.5"/>
+  <text class="th" x="530" y="539" text-anchor="middle" dominant-baseline="central">PCA dimensionality reduction</text>
+  <text class="ts" x="530" y="557" text-anchor="middle" dominant-baseline="central">3,072D → 50D · 80% variance kept</text>
+</g>
+<line x1="530" y1="570" x2="530" y2="597" class="arr" marker-end="url(#arrow)"/>
+
+<g class="node c-coral">
+  <rect x="400" y="598" width="260" height="52" rx="8" stroke-width="0.5"/>
+  <text class="th" x="530" y="619" text-anchor="middle" dominant-baseline="central">K-Means clustering</text>
+  <text class="ts" x="530" y="637" text-anchor="middle" dominant-baseline="central">k=4 · n_init=10 · random_state=42</text>
+</g>
+<line x1="530" y1="650" x2="530" y2="677" class="arr" marker-end="url(#arrow)"/>
+
+<g class="node c-coral">
+  <rect x="400" y="678" width="260" height="52" rx="8" stroke-width="0.5"/>
+  <text class="th" x="530" y="699" text-anchor="middle" dominant-baseline="central">Majority vote label mapping</text>
+  <text class="ts" x="530" y="717" text-anchor="middle" dominant-baseline="central">scipy.stats.mode per cluster</text>
+</g>
+<line x1="530" y1="730" x2="530" y2="749" class="arr" marker-end="url(#arrow)"/>
+
+<g class="node c-amber">
+  <rect x="400" y="750" width="260" height="64" rx="8" stroke-width="0.5"/>
+  <text class="th" x="530" y="771" text-anchor="middle" dominant-baseline="central">Results: 24.17% accuracy</text>
+  <text class="ts" x="530" y="789" text-anchor="middle" dominant-baseline="central">Near random-chance baseline (25%)</text>
+  <text class="ts" x="530" y="805" text-anchor="middle" dominant-baseline="central">Confirms pixel space non-separable</text>
+</g>
+
+<!-- ── MERGE → COMPARISON ── -->
+<line x1="150" y1="814" x2="150" y2="850" stroke="var(--color-border-primary)" stroke-width="0.8"/>
+<line x1="530" y1="814" x2="530" y2="850" stroke="var(--color-border-primary)" stroke-width="0.8"/>
+<line x1="150" y1="850" x2="530" y2="850" stroke="var(--color-border-primary)" stroke-width="0.8"/>
+<line x1="340" y1="850" x2="340" y2="873" class="arr" marker-end="url(#arrow)"/>
+
+<g class="node c-green">
+  <rect x="160" y="874" width="360" height="56" rx="8" stroke-width="0.5"/>
+  <text class="th" x="340" y="895" text-anchor="middle" dominant-baseline="central">Comparative evaluation</text>
+  <text class="ts" x="340" y="913" text-anchor="middle" dominant-baseline="central">Accuracy · F1 · Confusion matrix · Radar chart</text>
+</g>
+
+<!-- Predict new image sidebars -->
+<line x1="80" y1="782" x2="80" y2="935" stroke="var(--color-border-secondary)" stroke-width="0.5" stroke-dasharray="4 3"/>
+<line x1="80" y1="935" x2="100" y2="935" stroke="var(--color-border-secondary)" stroke-width="0.5" marker-end="url(#arrow)"/>
+<g class="node c-gray">
+  <rect x="20" y="916" width="160" height="44" rx="8" stroke-width="0.5"/>
+  <text class="th" x="100" y="934" text-anchor="middle" dominant-baseline="central">Predict new image</text>
+  <text class="ts" x="100" y="950" text-anchor="middle" dominant-baseline="central">RF: flatten → predict</text>
+</g>
+
+<line x1="600" y1="782" x2="600" y2="935" stroke="var(--color-border-secondary)" stroke-width="0.5" stroke-dasharray="4 3"/>
+<line x1="600" y1="935" x2="580" y2="935" stroke="var(--color-border-secondary)" stroke-width="0.5" marker-end="url(#arrow)"/>
+<g class="node c-gray">
+  <rect x="500" y="916" width="160" height="44" rx="8" stroke-width="0.5"/>
+  <text class="th" x="580" y="934" text-anchor="middle" dominant-baseline="central">Predict new image</text>
+  <text class="ts" x="580" y="950" text-anchor="middle" dominant-baseline="central">KM: PCA → cluster → map</text>
+</g>
+
+<!-- LEGEND -->
+<g class="c-teal"><rect x="60" y="988" width="12" height="12" rx="2" stroke-width="0.5"/></g>
+<text class="ts" x="77" y="999">Shared</text>
+<g class="c-purple"><rect x="160" y="988" width="12" height="12" rx="2" stroke-width="0.5"/></g>
+<text class="ts" x="177" y="999">Random Forest</text>
+<g class="c-coral"><rect x="300" y="988" width="12" height="12" rx="2" stroke-width="0.5"/></g>
+<text class="ts" x="317" y="999">K-Means + PCA</text>
+<g class="c-green"><rect x="440" y="988" width="12" height="12" rx="2" stroke-width="0.5"/></g>
+<text class="ts" x="457" y="999">Results</text>
+<g class="c-gray"><rect x="530" y="988" width="12" height="12" rx="2" stroke-width="0.5"/></g>
+<text class="ts" x="547" y="999">Inference</text>
+
+</svg>
