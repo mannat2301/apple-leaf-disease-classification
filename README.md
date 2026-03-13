@@ -232,11 +232,6 @@ pip install numpy opencv-python matplotlib seaborn pandas scikit-learn scipy jup
 
 ---
 
-## 📄 License
-
-This project is licensed under the **MIT License** — see [LICENSE](LICENSE) for details.
-
----
 
 <div align="center">
 
